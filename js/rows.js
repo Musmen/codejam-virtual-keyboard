@@ -1,7 +1,8 @@
-const SPECIALS = ['Backspace', 'Tab', 'Enter', 'CapsLock', 'ShiftLeft', 'ShiftRight', 'AltLeft', 'AltRight',
-  'ControlLeft', 'ControlRight', 'MetaLeft', 'Delete'];
+// export const SPECIALS = ['Backspace', 'Tab', 'Enter', 'CapsLock', 'ShiftLeft', 'ShiftRight', 'AltLeft', 'AltRight',
+//   'ControlLeft', 'ControlRight', 'MetaLeft', 'Delete'];
 
 const ROWS = [];
+export default ROWS;
 
 ROWS[0] = [
   {
