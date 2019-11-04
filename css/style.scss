@@ -54,14 +54,14 @@
     cursor: pointer;
     user-select: none;
     transition: border-radius 0.3s, background 0.2s;
+    
+    &:hover {
+      background: #251c1c;
+    }
 
     &.active {
       background-color: #5571ee;
       border-radius: 50px;
-    }
-
-    &:hover {
-      background: #251c1c;
     }
   }
 

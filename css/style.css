@@ -56,13 +56,13 @@
   transition: border-radius 0.3s, background 0.2s;
 }
 
+.keyboard .key:hover {
+  background: #251c1c;
+}
+
 .keyboard .key.active {
   background-color: #5571ee;
   border-radius: 50px;
-}
-
-.keyboard .key:hover {
-  background: #251c1c;
 }
 
 .keyboard .Tab {
