@@ -1,12 +1,12 @@
 .centralizer {
   margin: 0 auto;
 
-  font-family: "Roboto", "Segoe UI", "Tahoma", sans-serif;
+  font-family: "Trebuchet MS", "Helvetica", sans-serif;
 }
 
 .textarea {
   display: block;
-  width: 800px;
+  width: 700px;
   height: 300px;
   margin: 0 auto 10px;
   padding: 10px;
@@ -29,6 +29,13 @@
 .keyboard {
   width: 704px;
   margin: 0 auto;
+  padding: 5px;
+  padding-left: 0;
+  padding-bottom: 0;
+
+  background: #888888;
+  border: 3px solid #222222;
+  border-radius: 5px;
 
   .row {
     clear: both;
@@ -46,33 +53,23 @@
     font-weight: 500;
     line-height: 40px;
     text-align: center;
-    color: #fff;
+    color: #ffffff;
 
-    background: #3a424e;
+    background: #444444;
     border-radius: 3px;
 
     cursor: pointer;
     user-select: none;
-    transition: border-radius 0.3s, background 0.2s;
+    transition: border-radius 0.3s, background-color 0.3s;
     
     &:hover {
-      background: #251c1c;
+      background: #79aa89;
     }
 
     &.active {
-      background-color: #5571ee;
+      background-color: #2cfd72;
       border-radius: 50px;
     }
-  }
-
-  .Tab {
-    width: 70px;
-  }
-
-  .Backspace,
-  .CapsLock,
-  .ShiftLeft {
-    width: 100px;
   }
 
   .AltLeft,
@@ -85,18 +82,28 @@
   .CapsLock,
   .ControlLeft,
   .ControlRight,
+  .Delete,
   .Enter,
   .ShiftLeft,
   .ShiftRight,
   .Tab,
   .MetaLeft {
     font-weight: 600;
-    color: grey;
-    background-color: #1c232e;
+    background-color: #222222;
   }
 
-  .Backslash  {
-    width: 70px;
+  .Tab {
+    width: 50px;
+  }
+
+  .Backspace,
+  .CapsLock,
+  .ShiftLeft {
+    width: 100px;
+  }
+
+  .Delete  {
+    width: 44px;
   }
 
   .Enter,

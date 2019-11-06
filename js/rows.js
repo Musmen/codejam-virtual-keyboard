@@ -3,10 +3,6 @@ const SPECIALS = ['Backspace', 'Tab', 'Enter', 'CapsLock', 'ShiftLeft', 'ShiftRi
 
 const ROWS = [];
 
-// const DATA = {};
-// DATA.SPECIALS = SPECIALS;
-// DATA.ROWS = ROWS;
-
 export default { SPECIALS, ROWS };
 
 ROWS[0] = [
@@ -375,6 +371,19 @@ ROWS[1] = [
         {
           caseDown: '\\',
           caseUp: '/',
+        },
+  },
+  {
+    className: 'Delete',
+    eng:
+        {
+          caseDown: 'Del',
+          caseUp: 'Del',
+        },
+    rus:
+        {
+          caseDown: 'Del',
+          caseUp: 'Del',
         },
   },
 ];

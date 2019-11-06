@@ -155,6 +155,14 @@ class Keyboard {
             this.textarea.selectionEnd = selStart - 1;
           }
           break;
+        case 'Delete':
+          if (selStart >= 0 && selStart <= text.length - 1) {
+            text = text.slice(0, selStart) + text.slice(selStart + 1, text.length);
+            this.textarea.value = text;
+            this.textarea.selectionStart = selStart;
+            this.textarea.selectionEnd = selStart;
+          }
+          break;
         case 'Tab':
           this.current.char = '    ';
           printChar();
@@ -188,7 +196,6 @@ class Keyboard {
           }
           break;
         default:
-
           break;
       }
     } else {
@@ -203,13 +210,15 @@ class Keyboard {
     this.current.code = evt.code;
     [this.current.element] = this.element.getElementsByClassName(evt.code);
     if (!this.current.element) {
-      evt.preventDefault();
       return;
     }
     this.current.char = this.current.element.querySelectorAll(':not(.hidden)')[1].textContent;
     this.implementKeyFunction();
 
-    if (!['CapsLock', 'ShiftLeft', 'ShiftRight'].includes(evt.code)) {
+    if (this.current.code === 'MetaLeft') {
+      this.addActiveState();
+      setTimeout(this.removeActiveState.bind(this), 300);
+    } else if (!['CapsLock', 'ShiftLeft', 'ShiftRight'].includes(this.current.code)) {
       this.addActiveState();
     }
 
@@ -291,14 +300,3 @@ class Keyboard {
 
 const keyboard = new Keyboard();
 keyboard.initKeyboard(DATA.ROWS);
-
-/* <div class="key keyQ">
-  <span class="rus hidden">
-    <span class="caseDown hidden">й</span>
-    <span class="caseUp hidden">Й</span>
-  </span>
-  <span class="eng">
-    <span class="caseDown">q</span>
-    <span class="caseUp hidden">Q</span>
-  </span>
-</div> */

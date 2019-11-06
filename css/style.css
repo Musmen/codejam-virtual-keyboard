@@ -1,11 +1,11 @@
 .centralizer {
   margin: 0 auto;
-  font-family: "Roboto", "Segoe UI", "Tahoma", sans-serif;
+  font-family: "Trebuchet MS", "Helvetica", sans-serif;
 }
 
 .textarea {
   display: block;
-  width: 800px;
+  width: 700px;
   height: 300px;
   margin: 0 auto 10px;
   padding: 10px;
@@ -27,6 +27,12 @@
 .keyboard {
   width: 704px;
   margin: 0 auto;
+  padding: 5px;
+  padding-left: 0;
+  padding-bottom: 0;
+  background: #888888;
+  border: 3px solid #222222;
+  border-radius: 5px;
 }
 
 .keyboard .row {
@@ -44,35 +50,25 @@
   font-weight: 500;
   line-height: 40px;
   text-align: center;
-  color: #fff;
-  background: #3a424e;
+  color: #ffffff;
+  background: #444444;
   border-radius: 3px;
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  -webkit-transition: border-radius 0.3s, background 0.2s;
-  transition: border-radius 0.3s, background 0.2s;
+  -webkit-transition: border-radius 0.3s, background-color 0.3s;
+  transition: border-radius 0.3s, background-color 0.3s;
 }
 
 .keyboard .key:hover {
-  background: #251c1c;
+  background: #79aa89;
 }
 
 .keyboard .key.active {
-  background-color: #5571ee;
+  background-color: #2cfd72;
   border-radius: 50px;
-}
-
-.keyboard .Tab {
-  width: 70px;
-}
-
-.keyboard .Backspace,
-.keyboard .CapsLock,
-.keyboard .ShiftLeft {
-  width: 100px;
 }
 
 .keyboard .AltLeft,
@@ -85,18 +81,28 @@
 .keyboard .CapsLock,
 .keyboard .ControlLeft,
 .keyboard .ControlRight,
+.keyboard .Delete,
 .keyboard .Enter,
 .keyboard .ShiftLeft,
 .keyboard .ShiftRight,
 .keyboard .Tab,
 .keyboard .MetaLeft {
   font-weight: 600;
-  color: grey;
-  background-color: #1c232e;
+  background-color: #222222;
 }
 
-.keyboard .Backslash {
-  width: 70px;
+.keyboard .Tab {
+  width: 50px;
+}
+
+.keyboard .Backspace,
+.keyboard .CapsLock,
+.keyboard .ShiftLeft {
+  width: 100px;
+}
+
+.keyboard .Delete {
+  width: 44px;
 }
 
 .keyboard .Enter,
