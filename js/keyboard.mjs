@@ -1,10 +1,10 @@
-import DATA from './rows.js'; // ToDo
+// eslint-disable-next-line import/extensions
+import DATA from './rows.js';
 
 class Keyboard {
   constructor() {
     this.element = null;
     this.textarea = null;
-    this.cursorPos = 0;
 
     this.state = {
       isShiftLeftPressed: false,
@@ -88,7 +88,7 @@ class Keyboard {
   removeActiveState() {
     if (!this.current.element) return;
     if (this.previous.element && this.previous.element.classList.contains('active')) {
-      if (this.previous.code !== 'CapsLock' && this.previous.code !== 'ShiftLeft' && this.previous.code !== 'ShiftRight') {
+      if (!['CapsLock', 'ShiftLeft', 'ShiftRight'].includes(this.previous.code)) {
         this.previous.element.classList.remove('active');
       }
     }
@@ -134,30 +134,16 @@ class Keyboard {
 
     function print() {
       if (selStart >= 0 && selStart <= text.length) {
-        // this.textarea.selectionStart = this.cursorPos;
-        // this.textarea.selectionEnd = this.cursorPos;
-        this.textarea.value = this.textarea.value.slice(0, selStart) + this.current.char + this.textarea.value.slice(selStart, this.textarea.value.length);
-        // this.cursorPos += 1;
-        this.textarea.selectionStart = selStart + 1;
-        this.textarea.selectionEnd = selStart + 1;
+        this.textarea.value = text.slice(0, selStart) + this.current.char
+          + text.slice(selStart, text.length);
+        this.textarea.selectionStart = selStart + this.current.char.length;
+        this.textarea.selectionEnd = selStart + this.current.char.length;
       } else {
         this.textarea.value += this.current.char;
       }
     }
 
     const printChar = print.bind(this);
-    
-    // function textareaRemovePrev() {
-    //   if (selStart > 0 && selStart <= text.length) {
-    //     text = text.slice(0, selStart - 1) + text.slice(selStart, text.length);//
-    //     this.textarea.value = text;
-    //     this.textarea.selectionStart = selStart - 1;
-    //     this.textarea.selectionEnd = selStart - 1;
-        // this.textarea.position = this.textarea.selectionStart;
-    //   }
-    // }
-
-    // const backspace = textareaRemovePrev.bind(this);
 
     if (DATA.SPECIALS.includes(this.current.code)) {
       switch (this.current.code) {
@@ -172,12 +158,10 @@ class Keyboard {
         case 'Tab':
           this.current.char = '    ';
           printChar();
-          // this.textarea.value += '    ';
           break;
         case 'Enter':
           this.current.char = '\n';
           printChar();
-          // this.textarea.value += '\n';
           break;
         case 'CapsLock':
           if (this.state.isCapsLockPressed && !this.current.event.repeat) {
@@ -210,21 +194,7 @@ class Keyboard {
     } else {
       printChar();
     }
-    
-    // if (!DATA.SPECIALS.includes(this.current.code)) {
-    // if (selStart >= 0 && selStart <= text.length) {
-      // this.textarea.selectionStart = this.cursorPos;
-      // this.textarea.selectionEnd = this.cursorPos;
-      // this.textarea.value = this.textarea.value.slice(0, selStart) + this.current.char + this.textarea.value.slice(selStart, this.textarea.value.length);
-      // this.cursorPos += 1;
-      // this.textarea.selectionStart = selStart + 1;
-      // this.textarea.selectionEnd = selStart + 1;
-    // } else {
-      // this.textarea.value += this.current.char;
-    // }
-    // } else {
-      
-    // }
+
     if (this.current.event.ctrlKey && this.current.event.altKey) this.toggleLang();
   }
 
@@ -239,7 +209,7 @@ class Keyboard {
     this.current.char = this.current.element.querySelectorAll(':not(.hidden)')[1].textContent;
     this.implementKeyFunction();
 
-    if (evt.code !== 'CapsLock' && evt.code !== 'ShiftLeft' && evt.code !== 'ShiftRight') {
+    if (!['CapsLock', 'ShiftLeft', 'ShiftRight'].includes(evt.code)) {
       this.addActiveState();
     }
 
