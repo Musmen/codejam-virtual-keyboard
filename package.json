@@ -1,25 +1,42 @@
 {
   "name": "codejam-virtual-keyboard",
   "version": "1.0.0",
-  "description": "RSShool. Stage 2. Task \"codejam-virtual-keyboard\"",
-  "main": "index.html",
+  "description": "RSSchool 2020 Q1. Stage 2. Virtual-keyboard",
+  "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Musmen/codejam-virtual-keyboard.git"
+    "start": "webpack-dev-server --mode development --open",
+    "build": "webpack --mode production",
+    "lint": "eslint ./js",
+    "watch": "webpack --watch"
   },
   "author": "Musmen",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Musmen/codejam-virtual-keyboard/issues"
-  },
-  "homepage": "https://github.com/Musmen/codejam-virtual-keyboard#readme",
   "devDependencies": {
-    "eslint": "^6.1.0",
-    "eslint-config-airbnb": "^18.0.1",
+    "autoprefixer": "^9.7.3",
+    "copy-webpack-plugin": "^5.0.5",
+    "css-loader": "^3.4.0",
+    "css-mqpacker": "^7.0.0",
+    "cssnano": "^4.1.10",
+    "del-cli": "^3.0.0",
+    "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-loader": "^3.0.2",
+    "eslint-plugin-import": "^2.18.2",
+    "file-loader": "^4.2.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "image-webpack-loader": "^6.0.0",
+    "mini-css-extract-plugin": "^0.8.2",
+    "node-sass": "^4.13.0",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.1.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "sass": "^1.24.0"
   }
 }

@@ -1,7 +1,6 @@
-// eslint-disable-next-line import/extensions
-import DATA from './rows.js';
+import DATA from './rows';
 
-class Keyboard {
+export default class Keyboard {
   constructor() {
     this.element = null;
     this.textarea = null;
@@ -35,6 +34,11 @@ class Keyboard {
     const centralizer = document.createElement('div');
     centralizer.classList.add('centralizer');
 
+    const pTitle = document.createElement('p');
+    pTitle.innerText = 'RSS Виртуальная клавиатура \n Да, это моя работа является демонстрацией к таску :)';
+    pTitle.classList.add('title');
+    centralizer.appendChild(pTitle);
+
     const textarea = document.createElement('textarea');
     textarea.classList.add('body--textarea', 'textarea');
     textarea.setAttribute('id', 'textarea');
@@ -61,6 +65,11 @@ class Keyboard {
           `<span class="caseDown hidden">${ROWS_DATA[i][j].rus.caseDown}</span>`);
         spanRus.insertAdjacentHTML('beforeEnd',
           `<span class="caseUp hidden">${ROWS_DATA[i][j].rus.caseUp}</span>`);
+        spanRus.insertAdjacentHTML('beforeEnd',
+          `<span class="caps hidden">${ROWS_DATA[i][j].rus.caps || ROWS_DATA[i][j].rus.caseUp}</span>`);
+        spanRus.insertAdjacentHTML('beforeEnd',
+          `<span class="shiftCaps hidden">${ROWS_DATA[i][j].rus.shiftCaps || ROWS_DATA[i][j].rus.caseDown}</span>`);
+
         div.appendChild(spanRus);
 
         const spanEng = document.createElement('span');
@@ -69,6 +78,11 @@ class Keyboard {
           `<span class="caseDown">${ROWS_DATA[i][j].eng.caseDown}</span>`);
         spanEng.insertAdjacentHTML('beforeEnd',
           `<span class="caseUp hidden">${ROWS_DATA[i][j].eng.caseUp}</span>`);
+        spanEng.insertAdjacentHTML('beforeEnd',
+          `<span class="caps hidden">${ROWS_DATA[i][j].eng.caps || ROWS_DATA[i][j].eng.caseUp}</span>`);
+        spanEng.insertAdjacentHTML('beforeEnd',
+          `<span class="shiftCaps hidden">${ROWS_DATA[i][j].eng.shiftCaps || ROWS_DATA[i][j].eng.caseDown}</span>`);
+
         div.appendChild(spanEng);
 
         row.appendChild(div);
@@ -78,6 +92,17 @@ class Keyboard {
 
     this.element.appendChild(fragment);
     centralizer.appendChild(this.element);
+
+    const p = document.createElement('p');
+    p.innerText = 'Клавиатура создана в операционной системе Windows';
+    p.classList.add('description');
+    centralizer.appendChild(p);
+
+    const pLang = document.createElement('p');
+    pLang.innerText = 'Для переключения языка комбинация: левыe Сtrl + Alt';
+    pLang.classList.add('language');
+    centralizer.appendChild(pLang);
+
     document.body.appendChild(centralizer);
   }
 
@@ -98,13 +123,24 @@ class Keyboard {
   toggleCase() {
     const langSpans = this.element.querySelectorAll(`div > .${this.state.lang}`);
     for (let i = 0; i < langSpans.length; i += 1) {
-      langSpans[i].querySelectorAll('span')[0].classList.toggle('hidden');
-      langSpans[i].querySelectorAll('span')[1].classList.toggle('hidden');
-    }
-    if (this.state.case === 'caseUp') {
-      this.state.case = 'caseDown';
-    } else {
-      this.state.case = 'caseUp';
+      langSpans[i].querySelectorAll('span').forEach((span) => {
+        if (!span.classList.contains('hidden')) span.classList.add('hidden');
+      });
+
+      if ((this.state.isShiftLeftPressed || this.state.isShiftRightPressed)
+        && this.state.isCapsLockPressed) {
+        langSpans[i].querySelectorAll('span')[3].classList.remove('hidden');
+        this.state.case = 'shiftCaps';
+      } else if (this.state.isCapsLockPressed) {
+        langSpans[i].querySelectorAll('span')[2].classList.remove('hidden');
+        this.state.case = 'caps';
+      } else if (this.state.isShiftLeftPressed || this.state.isShiftRightPressed) {
+        langSpans[i].querySelectorAll('span')[1].classList.remove('hidden');
+        this.state.case = 'caseUp';
+      } else {
+        langSpans[i].querySelectorAll('span')[0].classList.remove('hidden');
+        this.state.case = 'caseDown';
+      }
     }
   }
 
@@ -124,6 +160,7 @@ class Keyboard {
     } else {
       this.state.lang = 'eng';
     }
+
     localStorage.setItem('lang', this.state.lang);
     toggleHiddenStateByLang();
   }
@@ -184,15 +221,15 @@ class Keyboard {
         case 'ShiftLeft':
           if (!this.state.isShiftLeftPressed && !this.state.isShiftRightPressed) {
             this.addActiveState();
-            this.toggleCase();
             this.state.isShiftLeftPressed = true;
+            this.toggleCase();
           }
           break;
         case 'ShiftRight':
           if (!this.state.isShiftRightPressed && !this.state.isShiftLeftPressed) {
             this.addActiveState();
-            this.toggleCase();
             this.state.isShiftRightPressed = true;
+            this.toggleCase();
           }
           break;
         default:
@@ -206,6 +243,7 @@ class Keyboard {
   }
 
   keyDownHandler(evt) {
+    evt.preventDefault();
     this.current.event = evt;
     this.current.code = evt.code;
     [this.current.element] = this.element.getElementsByClassName(evt.code);
@@ -221,8 +259,6 @@ class Keyboard {
     } else if (!['CapsLock', 'ShiftLeft', 'ShiftRight'].includes(this.current.code)) {
       this.addActiveState();
     }
-
-    evt.preventDefault();
   }
 
   keyUpHandler(evt) {
@@ -231,7 +267,6 @@ class Keyboard {
     this.current.element = elem.closest('div');
     if (evt.code !== 'CapsLock') this.removeActiveState();
     if (evt.code === 'ShiftLeft' || evt.code === 'ShiftRight') {
-      this.toggleCase();
       if (evt.code === 'ShiftLeft') {
         this.state.isShiftLeftPressed = false;
         this.removeActiveState();
@@ -239,6 +274,7 @@ class Keyboard {
         this.state.isShiftRightPressed = false;
         this.removeActiveState();
       }
+      this.toggleCase();
     }
   }
 
@@ -271,12 +307,12 @@ class Keyboard {
     if (this.current.code !== 'CapsLock') {
       this.removeActiveState();
       if (this.state.isShiftLeftPressed && this.current.code === 'ShiftLeft') {
-        this.toggleCase();
         this.state.isShiftLeftPressed = false;
+        this.toggleCase();
       }
       if (this.state.isShiftRightPressed && this.current.code === 'ShiftRight') {
-        this.toggleCase();
         this.state.isShiftRightPressed = false;
+        this.toggleCase();
       }
     }
   }
@@ -297,6 +333,3 @@ class Keyboard {
     this.element.addEventListener('mousedown', this.mouseDownHandler.bind(this));
   }
 }
-
-const keyboard = new Keyboard();
-keyboard.initKeyboard(DATA.ROWS);
