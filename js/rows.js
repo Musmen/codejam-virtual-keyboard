@@ -10,169 +10,221 @@ ROWS[0] = [
     className: 'Backquote',
     eng:
         {
+          caps: '`',
           caseDown: '`',
           caseUp: '~',
+          shiftCaps: '~',
         },
     rus:
         {
+          caps: 'Ё',
           caseDown: 'ё',
           caseUp: 'Ё',
+          shiftCaps: 'ё',
         },
   },
   {
     className: 'Digit1',
     eng:
         {
+          caps: '1',
           caseDown: '1',
           caseUp: '!',
+          shiftCaps: '!',
         },
     rus:
         {
+          caps: '1',
           caseDown: '1',
           caseUp: '!',
+          shiftCaps: '!',
         },
   },
   {
     className: 'Digit2',
     eng:
         {
+          caps: '2',
           caseDown: '2',
           caseUp: '@',
+          shiftCaps: '@',
         },
     rus:
         {
+          caps: '2',
           caseDown: '2',
           caseUp: '"',
+          shiftCaps: '"',
         },
   },
   {
     className: 'Digit3',
     eng:
         {
+          caps: '3',
           caseDown: '3',
           caseUp: '#',
+          shiftCaps: '#',
         },
     rus:
         {
+          caps: '3',
           caseDown: '3',
           caseUp: '№',
+          shiftCaps: '№',
         },
   },
   {
     className: 'Digit4',
     eng:
         {
+          caps: '4',
           caseDown: '4',
           caseUp: '$',
+          shiftCaps: '$',
         },
     rus:
         {
+          caps: '4',
           caseDown: '4',
           caseUp: ';',
+          shiftCaps: ';',
         },
   },
   {
     className: 'Digit5',
     eng:
         {
+          caps: '5',
           caseDown: '5',
           caseUp: '%',
+          shiftCaps: '%',
         },
     rus:
         {
+          caps: '5',
           caseDown: '5',
           caseUp: '%',
+          shiftCaps: '%',
         },
   },
   {
     className: 'Digit6',
     eng:
         {
+          caps: '6',
           caseDown: '6',
           caseUp: '^',
+          shiftCaps: '^',
         },
     rus:
         {
+          caps: '6',
           caseDown: '6',
           caseUp: ':',
+          shiftCaps: ':',
         },
   },
   {
     className: 'Digit7',
     eng:
         {
+          caps: '7',
           caseDown: '7',
           caseUp: '&',
+          shiftCaps: '&',
         },
     rus:
         {
+          caps: '7',
           caseDown: '7',
           caseUp: '?',
+          shiftCaps: '?',
         },
   },
   {
     className: 'Digit8',
     eng:
         {
+          caps: '8',
           caseDown: '8',
           caseUp: '*',
+          shiftCaps: '*',
         },
     rus:
         {
+          caps: '8',
           caseDown: '8',
           caseUp: '*',
+          shiftCaps: '*',
         },
   },
   {
     className: 'Digit9',
     eng:
         {
+          caps: '9',
           caseDown: '9',
           caseUp: '(',
+          shiftCaps: '(',
         },
     rus:
         {
+          caps: '9',
           caseDown: '9',
           caseUp: '(',
+          shiftCaps: '(',
         },
   },
   {
     className: 'Digit0',
     eng:
         {
+          caps: '0',
           caseDown: '0',
           caseUp: ')',
+          shiftCaps: ')',
         },
     rus:
         {
+          caps: '0',
           caseDown: '0',
           caseUp: ')',
+          shiftCaps: ')',
         },
   },
   {
     className: 'Minus',
     eng:
         {
+          caps: '-',
           caseDown: '-',
           caseUp: '_',
+          shiftCaps: '_',
         },
     rus:
         {
+          caps: '-',
           caseDown: '-',
           caseUp: '_',
+          shiftCaps: '_',
         },
   },
   {
     className: 'Equal',
     eng:
         {
+          caps: '=',
           caseDown: '=',
           caseUp: '+',
+          shiftCaps: '+',
         },
     rus:
         {
+          caps: '=',
           caseDown: '=',
           caseUp: '+',
+          shiftCaps: '+',
         },
   },
   {
@@ -338,39 +390,51 @@ ROWS[1] = [
     className: 'BracketLeft',
     eng:
         {
+          caps: '[',
           caseDown: '[',
           caseUp: '{',
+          shiftCaps: '{',
         },
     rus:
         {
+          caps: 'Х',
           caseDown: 'х',
           caseUp: 'Х',
+          shiftCaps: 'х',
         },
   },
   {
     className: 'BracketRight',
     eng:
         {
+          caps: ']',
           caseDown: ']',
           caseUp: '}',
+          shiftCaps: '}',
         },
     rus:
         {
+          caps: 'Ъ',
           caseDown: 'ъ',
           caseUp: 'Ъ',
+          shiftCaps: 'ъ',
         },
   },
   {
     className: 'Backslash',
     eng:
         {
+          caps: '\\',
           caseDown: '\\',
           caseUp: '|',
+          shiftCaps: '|',
         },
     rus:
         {
+          caps: '\\',
           caseDown: '\\',
           caseUp: '/',
+          shiftCaps: '/',
         },
   },
   {
@@ -523,26 +587,34 @@ ROWS[2] = [
     className: 'Semicolon',
     eng:
         {
+          caps: ';',
           caseDown: ';',
           caseUp: ':',
+          shiftCaps: ':',
         },
     rus:
         {
+          caps: 'Ж',
           caseDown: 'ж',
           caseUp: 'Ж',
+          shiftCaps: 'ж',
         },
   },
   {
     className: 'Quote',
     eng:
         {
+          caps: '\'',
           caseDown: '\'',
           caseUp: '"',
+          shiftCaps: '"',
         },
     rus:
         {
+          caps: 'Э',
           caseDown: 'э',
           caseUp: 'Э',
+          shiftCaps: 'э',
         },
   },
   {
@@ -669,39 +741,51 @@ ROWS[3] = [
     className: 'Comma',
     eng:
         {
+          caps: ',',
           caseDown: ',',
           caseUp: '<',
+          shiftCaps: '<',
         },
     rus:
         {
+          caps: 'Б',
           caseDown: 'б',
           caseUp: 'Б',
+          shiftCaps: 'б',
         },
   },
   {
     className: 'Period',
     eng:
         {
+          caps: '.',
           caseDown: '.',
           caseUp: '>',
+          shiftCaps: '>',
         },
     rus:
         {
+          caps: 'Ю',
           caseDown: 'ю',
           caseUp: 'Ю',
+          shiftCaps: 'ю',
         },
   },
   {
     className: 'Slash',
     eng:
         {
+          caps: '/',
           caseDown: '/',
           caseUp: '?',
+          shiftCaps: '?',
         },
     rus:
         {
+          caps: '.',
           caseDown: '.',
           caseUp: ',',
+          shiftCaps: ',',
         },
   },
   {

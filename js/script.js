@@ -1,9 +1,12 @@
 import '../scss/style.scss';
 
-import Keyboard from './keyboard';
 import DATA from './rows';
+import renderDOM from './domRenderer';
+import Keyboard from './keyboard';
 
 window.onload = () => {
+  renderDOM(DATA.ROWS);
+
   const keyboard = new Keyboard();
-  keyboard.initKeyboard(DATA.ROWS);
+  keyboard.initKeyboard();
 };

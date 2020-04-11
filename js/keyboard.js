@@ -1,3 +1,14 @@
+import {
+  CASE_STATE,
+  LANGUAGE,
+  CLASS,
+  KEY_CODE,
+  KEY_CHAR,
+  STATE_DEPENDED_KEYS,
+} from './helper';
+
+import { toggleHiddenState, printChar, removeHiddenClass } from './utils';
+
 import DATA from './rows';
 
 export default class Keyboard {
@@ -9,8 +20,8 @@ export default class Keyboard {
       isShiftLeftPressed: false,
       isShiftRightPressed: false,
       isCapsLockPressed: false,
-      case: 'caseDown',
-      lang: 'eng',
+      case: CASE_STATE.INITIAL,
+      lang: LANGUAGE.ENGLISH,
     };
 
     this.current = {
@@ -28,187 +39,90 @@ export default class Keyboard {
     };
   }
 
-  initDomStructure(ROWS_DATA) {
-    document.body.classList.add('body');
-
-    const centralizer = document.createElement('div');
-    centralizer.classList.add('centralizer');
-
-    const pTitle = document.createElement('p');
-    pTitle.innerText = 'RSS Виртуальная клавиатура \n Да, это моя работа является демонстрацией к таску :)';
-    pTitle.classList.add('title');
-    centralizer.appendChild(pTitle);
-
-    const textarea = document.createElement('textarea');
-    textarea.classList.add('body--textarea', 'textarea');
-    textarea.setAttribute('id', 'textarea');
-    textarea.setAttribute('rows', '5');
-    textarea.setAttribute('cols', '50');
-    this.textarea = textarea;
-    centralizer.appendChild(this.textarea);
-
-    this.element = document.createElement('div');
-    this.element.classList.add('body--keyboard', 'keyboard');
-    this.element.setAttribute('id', 'keyboard');
-
-    const fragment = document.createDocumentFragment();
-    for (let i = 0; i < ROWS_DATA.length; i += 1) {
-      const row = document.createElement('div');
-      row.classList.add('keyboard--row', 'row');
-      for (let j = 0; j < ROWS_DATA[i].length; j += 1) {
-        const div = document.createElement('div');
-        div.classList.add('keyboard--key', 'key', ROWS_DATA[i][j].className);
-
-        const spanRus = document.createElement('span');
-        spanRus.classList.add('rus', 'hidden');
-        spanRus.insertAdjacentHTML('afterBegin',
-          `<span class="caseDown hidden">${ROWS_DATA[i][j].rus.caseDown}</span>`);
-        spanRus.insertAdjacentHTML('beforeEnd',
-          `<span class="caseUp hidden">${ROWS_DATA[i][j].rus.caseUp}</span>`);
-        spanRus.insertAdjacentHTML('beforeEnd',
-          `<span class="caps hidden">${ROWS_DATA[i][j].rus.caps || ROWS_DATA[i][j].rus.caseUp}</span>`);
-        spanRus.insertAdjacentHTML('beforeEnd',
-          `<span class="shiftCaps hidden">${ROWS_DATA[i][j].rus.shiftCaps || ROWS_DATA[i][j].rus.caseDown}</span>`);
-
-        div.appendChild(spanRus);
-
-        const spanEng = document.createElement('span');
-        spanEng.classList.add('eng');
-        spanEng.insertAdjacentHTML('afterBegin',
-          `<span class="caseDown">${ROWS_DATA[i][j].eng.caseDown}</span>`);
-        spanEng.insertAdjacentHTML('beforeEnd',
-          `<span class="caseUp hidden">${ROWS_DATA[i][j].eng.caseUp}</span>`);
-        spanEng.insertAdjacentHTML('beforeEnd',
-          `<span class="caps hidden">${ROWS_DATA[i][j].eng.caps || ROWS_DATA[i][j].eng.caseUp}</span>`);
-        spanEng.insertAdjacentHTML('beforeEnd',
-          `<span class="shiftCaps hidden">${ROWS_DATA[i][j].eng.shiftCaps || ROWS_DATA[i][j].eng.caseDown}</span>`);
-
-        div.appendChild(spanEng);
-
-        row.appendChild(div);
-      }
-      fragment.appendChild(row);
-    }
-
-    this.element.appendChild(fragment);
-    centralizer.appendChild(this.element);
-
-    const p = document.createElement('p');
-    p.innerText = 'Клавиатура создана в операционной системе Windows';
-    p.classList.add('description');
-    centralizer.appendChild(p);
-
-    const pLang = document.createElement('p');
-    pLang.innerText = 'Для переключения языка комбинация: левыe Сtrl + Alt';
-    pLang.classList.add('language');
-    centralizer.appendChild(pLang);
-
-    document.body.appendChild(centralizer);
-  }
-
   addActiveState() {
-    this.current.element.classList.add('active');
+    this.current.element.classList.add(CLASS.ACTIVE);
   }
 
   removeActiveState() {
     if (!this.current.element) return;
-    if (this.previous.element && this.previous.element.classList.contains('active')) {
-      if (!['CapsLock', 'ShiftLeft', 'ShiftRight'].includes(this.previous.code)) {
-        this.previous.element.classList.remove('active');
+    if (this.previous.element && this.previous.element.classList.contains(CLASS.ACTIVE)) {
+      if (!STATE_DEPENDED_KEYS.includes(this.previous.code)) {
+        this.previous.element.classList.remove(CLASS.ACTIVE);
       }
     }
-    this.current.element.classList.remove('active');
+    this.current.element.classList.remove(CLASS.ACTIVE);
   }
 
   toggleCase() {
     const langSpans = this.element.querySelectorAll(`div > .${this.state.lang}`);
-    for (let i = 0; i < langSpans.length; i += 1) {
-      langSpans[i].querySelectorAll('span').forEach((span) => {
-        if (!span.classList.contains('hidden')) span.classList.add('hidden');
+    langSpans.forEach((langSpan) => {
+      langSpan.querySelectorAll('span').forEach((span) => {
+        if (!span.classList.contains(CLASS.HIDDEN)) span.classList.add(CLASS.HIDDEN);
       });
 
       if ((this.state.isShiftLeftPressed || this.state.isShiftRightPressed)
         && this.state.isCapsLockPressed) {
-        langSpans[i].querySelectorAll('span')[3].classList.remove('hidden');
-        this.state.case = 'shiftCaps';
+        removeHiddenClass(langSpan.querySelectorAll('span')[3]);
+        this.state.case = CASE_STATE.SHIFT_AND_CAPS;
       } else if (this.state.isCapsLockPressed) {
-        langSpans[i].querySelectorAll('span')[2].classList.remove('hidden');
-        this.state.case = 'caps';
+        removeHiddenClass(langSpan.querySelectorAll('span')[2]);
+        this.state.case = CASE_STATE.CAPS_LOCK;
       } else if (this.state.isShiftLeftPressed || this.state.isShiftRightPressed) {
-        langSpans[i].querySelectorAll('span')[1].classList.remove('hidden');
-        this.state.case = 'caseUp';
+        removeHiddenClass(langSpan.querySelectorAll('span')[1]);
+        this.state.case = CASE_STATE.SHIFT;
       } else {
-        langSpans[i].querySelectorAll('span')[0].classList.remove('hidden');
-        this.state.case = 'caseDown';
+        removeHiddenClass(langSpan.querySelectorAll('span')[0]);
+        this.state.case = CASE_STATE.INITIAL;
       }
-    }
+    });
   }
 
   toggleLang() {
-    function toggleHiddenState() {
-      const langSpans = this.element.querySelectorAll(`div > .${this.state.lang}`);
-      for (let i = 0; i < langSpans.length; i += 1) {
-        langSpans[i].classList.toggle('hidden');
-        langSpans[i].querySelectorAll(`span.${this.state.case}`)[0].classList.toggle('hidden');
-      }
-    }
-    const toggleHiddenStateByLang = toggleHiddenState.bind(this);
+    const language = {
+      previous: this.state.lang,
+      new: (this.state.lang === LANGUAGE.ENGLISH) ? LANGUAGE.RUSSIAN : LANGUAGE.ENGLISH,
+    };
 
-    toggleHiddenStateByLang();
-    if (this.state.lang === 'eng') {
-      this.state.lang = 'rus';
-    } else {
-      this.state.lang = 'eng';
-    }
+    this.state.lang = language.new;
+    localStorage.setItem(LANGUAGE.LOCAL_STORAGE, language.new);
+    toggleHiddenState(this.element, this.state.case, language);
+  }
 
-    localStorage.setItem('lang', this.state.lang);
-    toggleHiddenStateByLang();
+  shiftPressedAction() {
+    this.addActiveState();
+    this.toggleCase();
   }
 
   implementKeyFunction() {
-    let text = this.textarea.value;
-    const selStart = this.textarea.selectionStart;
-
-    function print() {
-      if (selStart >= 0 && selStart <= text.length) {
-        this.textarea.value = text.slice(0, selStart) + this.current.char
-          + text.slice(selStart, text.length);
-        this.textarea.selectionStart = selStart + this.current.char.length;
-        this.textarea.selectionEnd = selStart + this.current.char.length;
-      } else {
-        this.textarea.value += this.current.char;
-      }
-    }
-
-    const printChar = print.bind(this);
+    const { selectionStart } = this.textarea;
 
     if (DATA.SPECIALS.includes(this.current.code)) {
       switch (this.current.code) {
-        case 'Backspace':
-          if (selStart > 0 && selStart <= text.length) {
-            text = text.slice(0, selStart - 1) + text.slice(selStart, text.length);
-            this.textarea.value = text;
-            this.textarea.selectionStart = selStart - 1;
-            this.textarea.selectionEnd = selStart - 1;
+        case KEY_CODE.BACKSPACE:
+          if (selectionStart > 0 && selectionStart <= this.textarea.value.length) {
+            this.textarea.value = this.textarea.value.slice(0, selectionStart - 1)
+              + this.textarea.value.slice(selectionStart, this.textarea.value.length);
+            this.textarea.selectionStart = selectionStart - 1;
+            this.textarea.selectionEnd = selectionStart - 1;
           }
           break;
-        case 'Delete':
-          if (selStart >= 0 && selStart <= text.length - 1) {
-            text = text.slice(0, selStart) + text.slice(selStart + 1, text.length);
-            this.textarea.value = text;
-            this.textarea.selectionStart = selStart;
-            this.textarea.selectionEnd = selStart;
+        case KEY_CODE.DELETE:
+          if (selectionStart >= 0 && selectionStart <= this.textarea.value.length - 1) {
+            this.textarea.value = this.textarea.value.slice(0, selectionStart)
+              + this.textarea.value.slice(selectionStart + 1, this.textarea.value.length);
+            this.textarea.selectionStart = selectionStart;
+            this.textarea.selectionEnd = selectionStart;
           }
           break;
-        case 'Tab':
-          this.current.char = '    ';
-          printChar();
+        case KEY_CODE.TABULATION:
+          this.current.char = KEY_CHAR.TABULATION;
+          this.textarea = printChar(selectionStart, this.textarea, this.current.char);
           break;
-        case 'Enter':
-          this.current.char = '\n';
-          printChar();
+        case KEY_CODE.ENTER:
+          this.current.char = KEY_CHAR.ENTER;
+          this.textarea = printChar(selectionStart, this.textarea, this.current.char);
           break;
-        case 'CapsLock':
+        case KEY_CODE.CAPS_LOCK:
           if (this.state.isCapsLockPressed && !this.current.event.repeat) {
             this.removeActiveState();
             this.state.isCapsLockPressed = false;
@@ -218,25 +132,23 @@ export default class Keyboard {
           }
           this.toggleCase();
           break;
-        case 'ShiftLeft':
+        case KEY_CODE.SHIFT_LEFT:
           if (!this.state.isShiftLeftPressed && !this.state.isShiftRightPressed) {
-            this.addActiveState();
             this.state.isShiftLeftPressed = true;
-            this.toggleCase();
+            this.shiftPressedAction();
           }
           break;
-        case 'ShiftRight':
+        case KEY_CODE.SHIFT_RIGHT:
           if (!this.state.isShiftRightPressed && !this.state.isShiftLeftPressed) {
-            this.addActiveState();
             this.state.isShiftRightPressed = true;
-            this.toggleCase();
+            this.shiftPressedAction();
           }
           break;
         default:
           break;
       }
     } else {
-      printChar();
+      this.textarea = printChar(selectionStart, this.textarea, this.current.char);
     }
 
     if (this.current.event.ctrlKey && this.current.event.altKey) this.toggleLang();
@@ -250,13 +162,13 @@ export default class Keyboard {
     if (!this.current.element) {
       return;
     }
-    this.current.char = this.current.element.querySelectorAll(':not(.hidden)')[1].textContent;
+    this.current.char = this.current.element.querySelectorAll(`:not(.${CLASS.HIDDEN})`)[1].textContent;
     this.implementKeyFunction();
 
-    if (this.current.code === 'MetaLeft') {
+    if (this.current.code === KEY_CODE.META_LEFT) {
       this.addActiveState();
       setTimeout(this.removeActiveState.bind(this), 300);
-    } else if (!['CapsLock', 'ShiftLeft', 'ShiftRight'].includes(this.current.code)) {
+    } else if (!STATE_DEPENDED_KEYS.includes(this.current.code)) {
       this.addActiveState();
     }
   }
@@ -265,12 +177,12 @@ export default class Keyboard {
     const elem = this.element.getElementsByClassName(evt.code)[0];
     if (!elem) return;
     this.current.element = elem.closest('div');
-    if (evt.code !== 'CapsLock') this.removeActiveState();
-    if (evt.code === 'ShiftLeft' || evt.code === 'ShiftRight') {
-      if (evt.code === 'ShiftLeft') {
+    if (evt.code !== KEY_CODE.CAPS_LOCK) this.removeActiveState();
+    if (evt.code === KEY_CODE.SHIFT_LEFT || evt.code === KEY_CODE.SHIFT_RIGHT) {
+      if (evt.code === KEY_CODE.SHIFT_LEFT) {
         this.state.isShiftLeftPressed = false;
         this.removeActiveState();
-      } else if (evt.code === 'ShiftRight') {
+      } else if (evt.code === KEY_CODE.SHIFT_RIGHT) {
         this.state.isShiftRightPressed = false;
         this.removeActiveState();
       }
@@ -287,7 +199,7 @@ export default class Keyboard {
     this.current.char = evt.target.textContent;
     this.implementKeyFunction();
 
-    if (this.current.code !== 'CapsLock') {
+    if (this.current.code !== KEY_CODE.CAPS_LOCK) {
       this.addActiveState();
     }
 
@@ -299,18 +211,18 @@ export default class Keyboard {
     this.current.event = evt;
     this.current.element = evt.target.closest('div');
     if (!this.current.element) return;
-    if (this.current.element.classList.contains('key')) {
+    if (this.current.element.classList.contains(CLASS.KEY)) {
       [, , this.current.code] = this.current.element.classList;
     } else {
       this.current = { ...this.previous };
     }
-    if (this.current.code !== 'CapsLock') {
+    if (this.current.code !== KEY_CODE.CAPS_LOCK) {
       this.removeActiveState();
-      if (this.state.isShiftLeftPressed && this.current.code === 'ShiftLeft') {
+      if (this.state.isShiftLeftPressed && this.current.code === KEY_CODE.SHIFT_LEFT) {
         this.state.isShiftLeftPressed = false;
         this.toggleCase();
       }
-      if (this.state.isShiftRightPressed && this.current.code === 'ShiftRight') {
+      if (this.state.isShiftRightPressed && this.current.code === KEY_CODE.SHIFT_RIGHT) {
         this.state.isShiftRightPressed = false;
         this.toggleCase();
       }
@@ -318,18 +230,39 @@ export default class Keyboard {
   }
 
   initLanguage() {
-    if (localStorage.lang === 'rus') {
+    if (localStorage.lang === LANGUAGE.RUSSIAN) {
       this.toggleLang();
     }
   }
 
-  initKeyboard(ROWS_DATA) {
-    this.initDomStructure(ROWS_DATA);
+  beforeUnloadHandler() {
+    document.removeEventListener('keydown', this.keyDownHandler);
+    document.removeEventListener('keyup', this.keyUpHandler);
+
+    this.element.removeEventListener('mousedown', this.mouseDownHandler);
+    document.removeEventListener('mouseup', this.mouseUpHandler);
+
+    window.removeEventListener('beforeunload', this.beforeUnloadHandler);
+  }
+
+  initKeyboard() {
+    this.element = document.querySelector(`.${CLASS.BODY_KEYBOARD}`);
+    this.textarea = document.querySelector(`.${CLASS.BODY_TEXTAREA}`);
+
     this.initLanguage();
 
-    document.addEventListener('keyup', this.keyUpHandler.bind(this));
-    document.addEventListener('keydown', this.keyDownHandler.bind(this));
-    document.addEventListener('mouseup', this.mouseUpHandler.bind(this));
-    this.element.addEventListener('mousedown', this.mouseDownHandler.bind(this));
+    this.keyUpHandler = this.keyUpHandler.bind(this);
+    this.keyDownHandler = this.keyDownHandler.bind(this);
+    this.mouseUpHandler = this.mouseUpHandler.bind(this);
+    this.mouseDownHandler = this.mouseDownHandler.bind(this);
+    this.beforeUnloadHandler = this.beforeUnloadHandler.bind(this);
+
+    document.addEventListener('keyup', this.keyUpHandler);
+    document.addEventListener('keydown', this.keyDownHandler);
+
+    document.addEventListener('mouseup', this.mouseUpHandler);
+    this.element.addEventListener('mousedown', this.mouseDownHandler);
+
+    window.addEventListener('beforeunload', this.beforeUnloadHandler);
   }
 }
